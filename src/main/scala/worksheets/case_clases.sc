@@ -50,3 +50,8 @@ MyData(count = -2) match {
   case MyData(_,`count`) => println("Its 3")
   case _ => println("Couldn't match")
 }
+
+
+// extracting from case class
+
+val MyData(name,amount) = MyData("test",2)

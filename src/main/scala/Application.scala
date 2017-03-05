@@ -1,30 +1,11 @@
-import repository.RepositoryImpl
+import controller.HotelListController
+import repository.HotelListItemRepository
+import service.HotelListService
 
-import scala.io.StdIn
+trait Application extends HotelListController{
 
-class Application  {
+  val hotelListItemRepository = new HotelListItemRepository
 
+  val hotelListService = new HotelListService(hotelListItemRepository)
 
- val repository = new RepositoryImpl
- val service = ???
-
-  println("Choose option: ")
-  println("list")
-  println("get [id[")
-  println("save [obj[")
-  println("exit")
-
-  def handleMenu():Unit = {
-    StdIn.readLine()match {
-      case "list" =>  ???
-      case "get"  =>  ???
-      case "exit" => System.exit(0)
-      case _ => handleMenu()
-    }
-  }
-
-}
-
-object Application extends Application with App {
-  handleMenu()
 }

@@ -2,7 +2,7 @@
 
 class MyClass(count: Int, val name: String) {
   private val hidden = "can you see it?"
-
+  var mutableField: String = "change me"
   def this(name: String) = this(3, name)
   def this() = this("test")
 
@@ -19,7 +19,9 @@ myClass + 3
 !myClass
 myClass.name
 myClass.noSideEffects
-
+println(myClass.mutableField)
+myClass.mutableField = "its changed now"
+println(myClass.mutableField)
 
 
 
