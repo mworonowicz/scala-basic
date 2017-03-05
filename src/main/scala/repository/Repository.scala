@@ -1,29 +1,49 @@
 package repository
 
-trait Repository {
+import model.HotelListItem
 
-  private[repository] val store:Map[Long,String]
 
-  def find(id:Long): Option[String] = store.get(id)
+class HotelListItemRepository extends Repository[HotelListItem]  with HotelListItemStore
 
-  def save(id: Long, value: String ): Unit
 
-  def remove(id: Long)
+private[repository] trait Repository[T] {
 
-  def findAll:List[String]
+  private var counter: Long = 0
+
+  private[repository] var store:Map[Long,T]
+
+  def id() = {
+    counter += 1
+    counter
+  }
+
+  def find(id:Long): Option[T] = store.get(id)
+
+  def save(id: Long, value: T ): Unit = store = store + (id -> value)
+
+  def remove(id: Long): Unit = store = store - id
+
+  def findAll:List[T] = store.values.toList
+
 }
 
-trait Store {
- private[repository] val store:Map[Long,String] = Map()
+private[repository] trait HotelListItemStore {
+ private[repository] var store:Map[Long,HotelListItem] =
+   (1L to 10L).map(
+    id =>
+      id -> HotelListItem(15.5 * id, (id * 2).toInt, Some(id))
+   ).foldLeft(Map[Long,HotelListItem]()) {
+    (map,tuple) => map + tuple
+  }
+
+
+  // using for comprehension
+  (for {
+    id <- 1L to 10L
+    tuple = id -> HotelListItem(15.5 * id, (id * 2).toInt, Some(id))
+  } yield tuple).foldLeft(Map[Long,HotelListItem]()) {
+    (map,tuple) => map + tuple
+  }
+
 }
 
-class RepositoryImpl extends Repository  with Store {
-
-  override def find(id: Long) = ???
-
-  override def save(id: Long, value: String) = ???
-
-  override def remove(id: Long) = ???
-
-  override def findAll = ???
-}
